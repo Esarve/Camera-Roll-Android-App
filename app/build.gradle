@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
 
 android {
     compileSdkVersion 32
@@ -31,6 +34,10 @@ android {
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
+    }
+
+    dataBinding {
+        enabled true
     }
 }
 
@@ -68,4 +75,10 @@ dependencies {
     implementation 'com.romandanylyk:pageindicatorview:1.0.1'
 
     implementation 'com.github.pluscubed:recycler-fast-scroll:0.3.2@aar'
+    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    kapt "com.android.databinding:compiler:3.1.4"
+}
+repositories {
+    mavenCentral()
 }

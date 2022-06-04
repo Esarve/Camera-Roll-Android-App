@@ -14,6 +14,7 @@ import us.koller.cameraroll.data.models.Video;
 import us.koller.cameraroll.ui.EditImageActivity;
 import us.koller.cameraroll.ui.ItemActivity;
 import us.koller.cameraroll.ui.MainActivity;
+import us.koller.cameraroll.ui.VideoPlayerActivityPro;
 
 public class IntentReceiver extends AppCompatActivity {
 
@@ -68,9 +69,9 @@ public class IntentReceiver extends AppCompatActivity {
         album.getAlbumItems().add(albumItem);
 
         if (albumItem instanceof Video) {
-//            Intent view_video = new Intent(this, VideoPlayerActivity.class)
-//                    .setData(uri);
-//            startActivity(view_video);
+            Intent view_video = new Intent(this, VideoPlayerActivityPro.class)
+                    .setData(uri);
+            startActivity(view_video);
         } else {
             Intent view_photo = new Intent(this, ItemActivity.class)
                     .setData(uri)
