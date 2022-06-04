@@ -3,23 +3,24 @@ package us.koller.cameraroll.adapter.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import us.koller.cameraroll.R;
 import us.koller.cameraroll.adapter.AbstractRecyclerViewAdapter;
-import us.koller.cameraroll.styles.Style;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.adapter.SelectorModeManager;
 import us.koller.cameraroll.adapter.main.viewHolder.AlbumHolder;
 import us.koller.cameraroll.adapter.main.viewHolder.NestedRecyclerViewAlbumHolder;
-import us.koller.cameraroll.data.models.Album;
 import us.koller.cameraroll.data.Settings;
+import us.koller.cameraroll.data.models.Album;
+import us.koller.cameraroll.styles.Style;
+import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.ui.AlbumActivity;
 import us.koller.cameraroll.ui.MainActivity;
 import us.koller.cameraroll.ui.ThemeableActivity;

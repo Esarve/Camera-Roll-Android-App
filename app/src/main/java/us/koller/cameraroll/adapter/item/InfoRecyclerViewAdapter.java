@@ -1,5 +1,7 @@
 package us.koller.cameraroll.adapter.item;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -10,13 +12,6 @@ import android.location.Address;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.media.ExifInterface;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.graphics.Palette;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +20,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.exifinterface.media.ExifInterface;
+import androidx.palette.graphics.Palette;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -45,8 +48,6 @@ import us.koller.cameraroll.util.ExifUtil;
 import us.koller.cameraroll.util.InfoUtil;
 import us.koller.cameraroll.util.MediaType;
 import us.koller.cameraroll.util.Util;
-
-import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
 

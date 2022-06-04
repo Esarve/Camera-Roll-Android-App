@@ -1,52 +1,28 @@
 package us.koller.cameraroll.ui;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.PictureInPictureParams;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.PlaybackControlView;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.ui.PlayerControlView;
 
 import us.koller.cameraroll.R;
-import us.koller.cameraroll.data.Settings;
 
 public class VideoPlayerActivity extends ThemeableActivity {
 
@@ -100,44 +76,44 @@ public class VideoPlayerActivity extends ThemeableActivity {
         setWindowInsets();
 
         //hide & show Nav-/StatusBar together with controls
-        final PlaybackControlView playbackControlView = (PlaybackControlView)
-                findViewById(R.id.playback_control_view).getParent();
+        final PlayerControlView playbackControlView =
+                findViewById(R.id.playback_control_view);
         final View bottomBarControls = findViewById(R.id.controls);
-        playbackControlView.setVisibilityListener(
-                new PlaybackControlView.VisibilityListener() {
-                    @Override
-                    public void onVisibilityChange(final int i) {
-                        //animate Toolbar & controls
-                        if (i != View.VISIBLE) {
-                            //make view visible again, so the Animation is visible
-                            playbackControlView.setVisibility(View.VISIBLE);
-                        }
-
-                        float toolbar_translationY = i == View.VISIBLE ? 0
-                                : -(toolbar.getHeight());
-                        toolbar.animate()
-                                .translationY(toolbar_translationY)
-                                .setInterpolator(new AccelerateDecelerateInterpolator())
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        playbackControlView.setVisibility(i);
-                                    }
-                                })
-                                .start();
-
-                        float controls_translationY = i == View.VISIBLE ? 0
-                                : bottomBarControls.getHeight();
-                        bottomBarControls.animate()
-                                .translationY(controls_translationY)
-                                .setInterpolator(new AccelerateDecelerateInterpolator())
-                                .start();
-
-                        //show/hide Nav-/StatusBar
-                        showOrHideSystemUi(i == View.VISIBLE);
-                    }
-                });
+//        playbackControlView.setVisibilityListener(
+//                new PlaybackControlView.VisibilityListener() {
+//                    @Override
+//                    public void onVisibilityChange(final int i) {
+//                        //animate Toolbar & controls
+//                        if (i != View.VISIBLE) {
+//                            //make view visible again, so the Animation is visible
+//                            playbackControlView.setVisibility(View.VISIBLE);
+//                        }
+//
+//                        float toolbar_translationY = i == View.VISIBLE ? 0
+//                                : -(toolbar.getHeight());
+//                        toolbar.animate()
+//                                .translationY(toolbar_translationY)
+//                                .setInterpolator(new AccelerateDecelerateInterpolator())
+//                                .setListener(new AnimatorListenerAdapter() {
+//                                    @Override
+//                                    public void onAnimationEnd(Animator animation) {
+//                                        super.onAnimationEnd(animation);
+//                                        playbackControlView.setVisibility(i);
+//                                    }
+//                                })
+//                                .start();
+//
+//                        float controls_translationY = i == View.VISIBLE ? 0
+//                                : bottomBarControls.getHeight();
+//                        bottomBarControls.animate()
+//                                .translationY(controls_translationY)
+//                                .setInterpolator(new AccelerateDecelerateInterpolator())
+//                                .start();
+//
+//                        //show/hide Nav-/StatusBar
+//                        showOrHideSystemUi(i == View.VISIBLE);
+//                    }
+//                });
     }
 
 
@@ -241,56 +217,56 @@ public class VideoPlayerActivity extends ThemeableActivity {
     }
 
     private void initPlayer() {
-        // Produces DataSource instances through which media data is loaded.
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, getString(R.string.app_name)), null);
-        // Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-        // This is the MediaSource representing the media to be played.
-        MediaSource videoSource = new ExtractorMediaSource(videoUri,
-                dataSourceFactory, extractorsFactory, null, null);
-
-        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this);
-
-        // Create the player
-        player = ExoPlayerFactory.newSimpleInstance(renderersFactory,
-                new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(null)),
-                new DefaultLoadControl());
-
-        // Bind the player to the view.
-        SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.simpleExoPlayerView);
-        simpleExoPlayerView.setPlayer(player);
-
-        // Prepare the player with the source.
-        player.prepare(videoSource);
-        player.setRepeatMode(Player.REPEAT_MODE_ONE);
-        player.setPlayWhenReady(true);
-
-        final ImageButton playPause = findViewById(R.id.play_pause);
-        player.addListener(new SimpleEventListener() {
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                //update PlayPause-Button
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && showAnimations()) {
-                    if (player.getPlayWhenReady()) {
-                        playPause.setImageResource(R.drawable.play_to_pause_avd);
-                    } else {
-                        playPause.setImageResource(R.drawable.pause_to_play_avd);
-                    }
-
-                    Drawable d = playPause.getDrawable();
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
-                } else {
-                    if (player.getPlayWhenReady()) {
-                        playPause.setImageResource(R.drawable.ic_pause_white);
-                    } else {
-                        playPause.setImageResource(R.drawable.ic_play_arrow_white);
-                    }
-                }
-            }
-        });
+//        // Produces DataSource instances through which media data is loaded.
+//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
+//                Util.getUserAgent(this, getString(R.string.app_name)), null);
+//        // Produces Extractor instances for parsing the media data.
+//        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+//        // This is the MediaSource representing the media to be played.
+//        MediaSource videoSource = new ExtractorMediaSource(videoUri,
+//                dataSourceFactory, extractorsFactory, null, null);
+//
+//        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this);
+//
+//        // Create the player
+//        player = ExoPlayerFactory.newSimpleInstance(renderersFactory,
+//                new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(null)),
+//                new DefaultLoadControl());
+//
+//        // Bind the player to the view.
+//        SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.simpleExoPlayerView);
+//        simpleExoPlayerView.setPlayer(player);
+//
+//        // Prepare the player with the source.
+//        player.prepare(videoSource);
+//        player.setRepeatMode(Player.REPEAT_MODE_ONE);
+//        player.setPlayWhenReady(true);
+//
+//        final ImageButton playPause = findViewById(R.id.play_pause);
+//        player.addListener(new SimpleEventListener() {
+//            @Override
+//            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+//                //update PlayPause-Button
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && showAnimations()) {
+//                    if (player.getPlayWhenReady()) {
+//                        playPause.setImageResource(R.drawable.play_to_pause_avd);
+//                    } else {
+//                        playPause.setImageResource(R.drawable.pause_to_play_avd);
+//                    }
+//
+//                    Drawable d = playPause.getDrawable();
+//                    if (d instanceof Animatable) {
+//                        ((Animatable) d).start();
+//                    }
+//                } else {
+//                    if (player.getPlayWhenReady()) {
+//                        playPause.setImageResource(R.drawable.ic_pause_white);
+//                    } else {
+//                        playPause.setImageResource(R.drawable.ic_play_arrow_white);
+//                    }
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -305,15 +281,15 @@ public class VideoPlayerActivity extends ThemeableActivity {
 
     @Override
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
-        SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.simpleExoPlayerView);
-        if (isInPictureInPictureMode) {
-            // Hide the controls in picture-in-picture mode.
-            simpleExoPlayerView.hideController();
-        } else {
-            // Restore the playback UI based on the playback status.
-            simpleExoPlayerView.showController();
-        }
+//        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+//        SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.simpleExoPlayerView);
+//        if (isInPictureInPictureMode) {
+//            // Hide the controls in picture-in-picture mode.
+//            simpleExoPlayerView.hideController();
+//        } else {
+//            // Restore the playback UI based on the playback status.
+//            simpleExoPlayerView.showController();
+//        }
     }
 
     @Override
@@ -342,48 +318,5 @@ public class VideoPlayerActivity extends ThemeableActivity {
     @Override
     public int getLightThemeRes() {
         return R.style.CameraRoll_Theme_Light_VideoPlayer;
-    }
-
-    public static class SimpleEventListener implements Player.EventListener {
-
-        @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest) {
-
-        }
-
-        @Override
-        public void onTracksChanged(TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray) {
-
-        }
-
-        @Override
-        public void onLoadingChanged(boolean isLoading) {
-
-        }
-
-        @Override
-        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-        }
-
-        @Override
-        public void onRepeatModeChanged(int repeatMode) {
-
-        }
-
-        @Override
-        public void onPlayerError(ExoPlaybackException error) {
-
-        }
-
-        @Override
-        public void onPositionDiscontinuity() {
-
-        }
-
-        @Override
-        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-        }
     }
 }

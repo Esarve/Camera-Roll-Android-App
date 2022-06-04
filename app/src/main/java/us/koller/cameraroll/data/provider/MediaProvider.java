@@ -5,16 +5,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
+import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.Album;
 import us.koller.cameraroll.data.models.AlbumItem;
 import us.koller.cameraroll.data.models.VirtualAlbum;
 import us.koller.cameraroll.data.provider.retriever.MediaStoreRetriever;
-import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.provider.retriever.StorageRetriever;
 import us.koller.cameraroll.util.SortUtil;
 
