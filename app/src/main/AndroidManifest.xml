@@ -42,7 +42,7 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".ui.VideoPlayerActivity"
+            android:name=".ui.VideoPlayerActivityPro"
             android:configChanges="screenSize|smallestScreenSize|orientation|screenLayout"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
