@@ -21,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import us.koller.cameraroll.R;
-import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.fileOperations.FileOperation;
 import us.koller.cameraroll.data.models.Album;
 import us.koller.cameraroll.data.models.AlbumItem;
@@ -178,7 +178,7 @@ public class FileOperationDialogActivity extends ThemeableActivity {
         }
         String title = getString(stringRes, files.length);
 
-        dialog = new AlertDialog.Builder(this, theme.getDialogThemeRes())
+        dialog = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setView(v)
                 .setPositiveButton(R.string.ok,
@@ -236,7 +236,7 @@ public class FileOperationDialogActivity extends ThemeableActivity {
 
         final EditText editText = dialogLayout.findViewById(R.id.edit_text);
 
-        dialog = new AlertDialog.Builder(this, theme.getDialogThemeRes())
+        dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.new_folder)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
@@ -313,17 +313,6 @@ public class FileOperationDialogActivity extends ThemeableActivity {
         }
     }
 
-
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_Translucent_FileOperationDialog;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_Translucent_FileOperationDialog;
-    }
-
     @Override
     public IntentFilter getBroadcastIntentFilter() {
         return FileOperation.Util.getIntentFilter(super.getBroadcastIntentFilter());
@@ -348,9 +337,7 @@ public class FileOperationDialogActivity extends ThemeableActivity {
                     final Drawable selectorOverlay = Util
                             .getAlbumItemSelectorOverlay(card.getContext());
                     Context context = card.getContext();
-                    int tintColor = Settings.getInstance(context)
-                            .getThemeInstance(context)
-                            .getAccentColorLight(context);
+                    int tintColor = ContextCompat.getColor(context, R.color.colorAccent);
                     final Drawable colorDrawable1 = new ColorDrawable(tintColor),
                             colorDrawable2 = new ColorDrawable(tintColor);
                     colorDrawable1.setAlpha(138);

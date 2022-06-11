@@ -3,14 +3,14 @@
     <!--dark theme colors-->
     <color name="colorPrimary">#212121</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="color_bg">#FAFAFA</color> <!--For background-->
+    <color name="color_bg">#212121</color> <!--For background-->
     <!--black theme colors-->
     <color name="black_bg">#000000</color>
     <!--accent color-->
     <!--light theme colors-->
-    <color name="colorPrimary_toolbar">#FAFAFA</color> <!--For toolbar-->
-    <color name="textColorPrimary">#424242</color> <!--For text-->
-    <color name="textColorSecondary">#64212121</color> <!--For text-->
+    <color name="colorPrimary_toolbar">#64000000</color>
+    <color name="textColorPrimary">#FFFFFF</color> <!--For text-->
+    <color name="textColorSecondary">#64FFFFFF</color> <!--For text-->
     <color name="colorAccent">#69F0AE</color>
     <color name="colorPrimaryDark_light">#E0E0E0</color>
     <color name="colorAccent_text">#8A212121</color>

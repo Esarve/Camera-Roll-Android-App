@@ -44,11 +44,4 @@ class VideoPlayerActivityPro: ThemeableActivity() {
         exoplayer.play()
     }
 
-    override fun getDarkThemeRes(): Int {
-        return R.style.CameraRoll_Theme_VideoPlayer
-    }
-
-    override fun getLightThemeRes(): Int {
-        return R.style.CameraRoll_Theme_Light_VideoPlayer
-    }
 }

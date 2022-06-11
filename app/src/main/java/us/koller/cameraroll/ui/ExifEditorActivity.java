@@ -27,6 +27,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,9 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import us.koller.cameraroll.R;
-import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.AlbumItem;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.util.ExifUtil;
 import us.koller.cameraroll.util.MediaType;
 import us.koller.cameraroll.util.Util;
@@ -62,6 +61,7 @@ public class ExifEditorActivity extends ThemeableActivity {
 
         AlbumItem albumItem = getIntent().getParcelableExtra(ALBUM_ITEM);
 
+        initTheme();
         if (savedInstanceState != null && savedInstanceState.containsKey(EDITED_ITEMS)) {
             editedItems = savedInstanceState.getParcelableArrayList(EDITED_ITEMS);
         } else {
@@ -183,6 +183,23 @@ public class ExifEditorActivity extends ThemeableActivity {
         }
     }
 
+    private void initTheme() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(toolbarColor);
+        toolbar.setTitleTextColor(textColorPrimary);
+
+        //todo: light dark statusbar
+//        if (theme.darkStatusBarIcons() &&
+//                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+//        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int statusBarColor = getStatusBarColor();
+            getWindow().setStatusBarColor(statusBarColor);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.exif_editor, menu);
@@ -274,32 +291,7 @@ public class ExifEditorActivity extends ThemeableActivity {
         outState.putParcelableArrayList(EDITED_ITEMS, editedItems);
     }
 
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_ExifEditor;
-    }
 
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_ExifEditor;
-    }
-
-    @Override
-    public void onThemeApplied(Theme theme) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolbarColor);
-        toolbar.setTitleTextColor(textColorPrimary);
-
-        if (theme.darkStatusBarIcons() &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int statusBarColor = getStatusBarColor();
-            getWindow().setStatusBarColor(statusBarColor);
-        }
-    }
 
     private static class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ExifViewHolder> {
 
@@ -335,10 +327,10 @@ public class ExifEditorActivity extends ThemeableActivity {
                 Context context = itemView.getContext();
                 TextView tagTV = itemView.findViewById(R.id.tag);
                 EditText valueET = itemView.findViewById(R.id.value);
-                Theme theme = Settings.getInstance(context).getThemeInstance(context);
-                tagTV.setTextColor(theme.getTextColorSecondary(context));
+//                Theme theme = Settings.getInstance(context).getThemeInstance(context);
+                tagTV.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
                 if (valueET != null) {
-                    valueET.setTextColor(theme.getTextColorPrimary(context));
+                    valueET.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
                 }
             }
         }

@@ -2,7 +2,6 @@ package us.koller.cameraroll.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -14,10 +13,7 @@ import us.koller.cameraroll.styles.List;
 import us.koller.cameraroll.styles.NestedRecyclerView;
 import us.koller.cameraroll.styles.Parallax;
 import us.koller.cameraroll.styles.Style;
-import us.koller.cameraroll.themes.BlackTheme;
-import us.koller.cameraroll.themes.DarkTheme;
-import us.koller.cameraroll.themes.LightTheme;
-import us.koller.cameraroll.themes.Theme;
+import us.koller.cameraroll.util.Constants;
 import us.koller.cameraroll.util.SortUtil;
 
 public class Settings {
@@ -25,7 +21,7 @@ public class Settings {
     public static final int DEFAULT_COLUMN_COUNT = 4;
     private static final String PREF_KEY_HIDDEN_FOLDERS = "HIDDEN_FOLDERS";
 
-    private String theme;
+    private Constants.THEMES theme;
     private boolean storageRetriever;
     private int style;
     private int columnCount;
@@ -56,9 +52,9 @@ public class Settings {
         SharedPreferences sharedPreferences
                 = PreferenceManager.getDefaultSharedPreferences(context);
 
-        theme = sharedPreferences.getString(
+        theme = Constants.THEMES.lookupByCode(sharedPreferences.getString(
                 context.getString(R.string.pref_key_theme),
-                context.getString(R.string.DARK_THEME_VALUE));
+                context.getString(R.string.FOLLOW_SYSTEM_VALUE)));
 
         storageRetriever = sharedPreferences.getBoolean(
                 context.getString(R.string.pref_key_media_retriever),
@@ -113,23 +109,11 @@ public class Settings {
     }
 
     /*Getter & Setter*/
-    public String getTheme() {
+    public Constants.THEMES getTheme() {
         return theme;
     }
 
-    public Theme getThemeInstance(Context context) {
-        String theme = getTheme();
-        Resources res = context.getResources();
-        if (theme.equals(res.getString(R.string.LIGHT_THEME_VALUE))) {
-            return new LightTheme();
-        } else if (theme.equals(res.getString(R.string.BLACK_THEME_VALUE))) {
-            return new BlackTheme();
-        } else {
-            return new DarkTheme();
-        }
-    }
-
-    public void setTheme(String theme) {
+    public void setTheme(Constants.THEMES theme) {
         this.theme = theme;
     }
 

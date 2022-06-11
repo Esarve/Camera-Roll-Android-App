@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
@@ -24,11 +26,11 @@ import java.util.ArrayList;
 
 import us.koller.cameraroll.R;
 import us.koller.cameraroll.data.Settings;
-import us.koller.cameraroll.themes.Theme;
+import us.koller.cameraroll.util.Constants;
 
 public abstract class ThemeableActivity extends BaseActivity {
 
-    Theme theme = null;
+//    Theme theme = null;
 
     public int backgroundColor;
     public int toolbarColor;
@@ -43,11 +45,37 @@ public abstract class ThemeableActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (theme == null) {
-            readTheme(this);
+        Settings settings = Settings.getInstance(getApplicationContext());
+        Constants.THEMES theme = settings.getTheme();
+        int THEMETYPE = 0;
+        switch (theme){
+            case DARK:
+                THEMETYPE = AppCompatDelegate.MODE_NIGHT_YES;
+                break;
+            case LIGHT:
+                THEMETYPE = AppCompatDelegate.MODE_NIGHT_NO;
+                break;
+            case SYSTEM:
+                THEMETYPE = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+                break;
+        }
+        AppCompatDelegate.setDefaultNightMode(THEMETYPE);
+        //todo: do themeing BS
+
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
+        int windowColor = -1;
+        if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT){
+            windowColor = typedValue.data;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(windowColor);
         }
 
-        setTheme(getThemeRes(theme));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
     }
 
     @Override
@@ -56,9 +84,9 @@ public abstract class ThemeableActivity extends BaseActivity {
 
         ViewGroup rootView = findViewById(R.id.root_view);
 
-        checkTags(rootView, theme);
+        checkTags(rootView);
 
-        onThemeApplied(theme);
+//        onThemeApplied(theme);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setupTaskDescription();
@@ -75,25 +103,25 @@ public abstract class ThemeableActivity extends BaseActivity {
     }
 
     private void readTheme(Context context) {
-        Settings s = Settings.getInstance(context);
-        theme = s.getThemeInstance(this);
+//        Settings settings = Settings.getInstance(context);
+//        theme = settings.getThemeInstance(this);
 
-        backgroundColor = theme.getBackgroundColor(this);
-        toolbarColor = theme.getToolbarColor(this);
-        textColorPrimary = theme.getTextColorPrimary(this);
-        textColorSecondary = theme.getTextColorSecondary(this);
-        accentColor = theme.getAccentColor(this);
-        accentTextColor = theme.getAccentTextColor(this);
+        backgroundColor = ContextCompat.getColor(context, R.color.color_bg);
+        toolbarColor = ContextCompat.getColor(context, R.color.colorPrimary_toolbar);
+        textColorPrimary = ContextCompat.getColor(context, R.color.textColorPrimary);
+        textColorSecondary = ContextCompat.getColor(context, R.color.textColorSecondary);
+        accentColor = ContextCompat.getColor(context, R.color.colorAccent);
+        accentTextColor = ContextCompat.getColor(context, R.color.colorAccent_text);
     }
 
     //static Method to call, when adding a view dynamically in order to get Theme applied
-    public static void checkTags(ViewGroup viewGroup, Theme theme) {
-        setViewBgColors(viewGroup, theme);
+    public static void checkTags(ViewGroup viewGroup) {
+        setViewBgColors(viewGroup);
 
-        setViewTextColors(viewGroup, theme);
+        setViewTextColors(viewGroup);
     }
 
-    private static void setViewTextColors(ViewGroup vg, Theme theme) {
+    private static void setViewTextColors(ViewGroup vg) {
         if (vg == null) {
             return;
         }
@@ -102,7 +130,7 @@ public abstract class ThemeableActivity extends BaseActivity {
         String TAG_TEXT_PRIMARY = vg.getContext().getString(R.string.theme_text_color_primary);
         ArrayList<View> viewsPrimary = findViewsWithTag(TAG_TEXT_PRIMARY, vg);
 
-        int textColorPrimary = theme.getTextColorPrimary(vg.getContext());
+        int textColorPrimary = ContextCompat.getColor(vg.getContext(), R.color.textColorPrimary);
         for (int i = 0; i < viewsPrimary.size(); i++) {
             View v = viewsPrimary.get(i);
             if (v instanceof TextView) {
@@ -115,7 +143,7 @@ public abstract class ThemeableActivity extends BaseActivity {
         String TAG_TEXT_SECONDARY = vg.getContext().getString(R.string.theme_text_color_secondary);
         ArrayList<View> viewsSecondary = findViewsWithTag(TAG_TEXT_SECONDARY, vg);
 
-        int textColorSecondary = theme.getTextColorSecondary(vg.getContext());
+        int textColorSecondary = ContextCompat.getColor(vg.getContext(), R.color.textColorSecondary);
         for (int i = 0; i < viewsSecondary.size(); i++) {
             View v = viewsSecondary.get(i);
             if (v instanceof TextView) {
@@ -126,7 +154,7 @@ public abstract class ThemeableActivity extends BaseActivity {
         }
     }
 
-    private static void setViewBgColors(ViewGroup vg, Theme theme) {
+    private static void setViewBgColors(ViewGroup vg) {
         if (vg == null) {
             return;
         }
@@ -135,7 +163,7 @@ public abstract class ThemeableActivity extends BaseActivity {
         String TAG = vg.getContext().getString(R.string.theme_bg_color);
         ArrayList<View> views = findViewsWithTag(TAG, vg);
 
-        int backgroundColor = theme.getBackgroundColor(vg.getContext());
+        int backgroundColor = ContextCompat.getColor(vg.getContext(), R.color.colorPrimary_toolbar);
         for (int i = 0; i < views.size(); i++) {
             views.get(i).setBackgroundColor(backgroundColor);
         }
@@ -167,18 +195,6 @@ public abstract class ThemeableActivity extends BaseActivity {
         return views;
     }
 
-    public int getThemeRes(Theme theme) {
-        return theme.isBaseLight() ? getLightThemeRes() : getDarkThemeRes();
-    }
-
-    public abstract int getDarkThemeRes();
-
-    public abstract int getLightThemeRes();
-
-    public void onThemeApplied(Theme theme) {
-
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setupTaskDescription() {
         int color = getTaskDescriptionColor();
@@ -203,8 +219,7 @@ public abstract class ThemeableActivity extends BaseActivity {
     }
 
     public int getTaskDescriptionColor() {
-        int colorRes = theme.isBaseLight() ? R.color.colorPrimary_light : R.color.colorPrimary;
-        return ContextCompat.getColor(this, colorRes);
+        return ContextCompat.getColor(this, R.color.colorPrimary);
     }
 
     public int getStatusBarColor() {

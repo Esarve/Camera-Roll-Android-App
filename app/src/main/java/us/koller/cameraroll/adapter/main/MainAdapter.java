@@ -20,7 +20,6 @@ import us.koller.cameraroll.adapter.main.viewHolder.NestedRecyclerViewAlbumHolde
 import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.Album;
 import us.koller.cameraroll.styles.Style;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.ui.AlbumActivity;
 import us.koller.cameraroll.ui.MainActivity;
 import us.koller.cameraroll.ui.ThemeableActivity;
@@ -50,8 +49,8 @@ public class MainAdapter extends AbstractRecyclerViewAdapter<ArrayList<Album>> {
         }
 
         Context context = viewHolder.itemView.getContext();
-        Theme theme = Settings.getInstance(context).getThemeInstance(context);
-        ThemeableActivity.checkTags((ViewGroup) viewHolder.itemView, theme);
+//        Theme theme = Settings.getInstance(context).getThemeInstance(context);
+        ThemeableActivity.checkTags((ViewGroup) viewHolder.itemView);
         return viewHolder;
     }
 

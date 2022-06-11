@@ -117,6 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case MainActivity.REMOVABLE_STORAGE_PERMISSION_REQUEST_CODE:
                 if (resultCode == RESULT_OK && workIntent != null) {
@@ -139,6 +140,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case MediaProvider.PERMISSION_REQUEST_CODE: {
                 // If request is cancelled, the result arrays are empty.

@@ -11,12 +11,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import us.koller.cameraroll.R;
 import us.koller.cameraroll.adapter.main.viewHolder.SimpleAlbumHolder;
 import us.koller.cameraroll.data.Settings;
-import us.koller.cameraroll.themes.Theme;
+
 
 public abstract class Style {
 
@@ -95,8 +96,8 @@ public abstract class Style {
 
     int getAccentColor(Context context) {
         Settings settings = Settings.getInstance(context);
-        Theme theme = settings.getThemeInstance(context);
-        return theme.getAccentColor(context);
+//        Theme theme = settings.getThemeInstance(context);
+        return ContextCompat.getColor(context, R.color.colorAccent);
     }
 
     void disableColumnCountButtons(View view) {
@@ -129,8 +130,8 @@ public abstract class Style {
         };
 
         Settings s = Settings.getInstance(view.getContext());
-        Theme theme = s.getThemeInstance(view.getContext());
-        int textColor = theme.getTextColorSecondary(view.getContext());
+//        Theme theme = s.getThemeInstance(view.getContext());
+        int textColor = ContextCompat.getColor(view.getContext(), R.color.textColorSecondary);
 
         ImageButton minus = view.findViewById(R.id.minus);
         minus.setOnClickListener(clickListener);

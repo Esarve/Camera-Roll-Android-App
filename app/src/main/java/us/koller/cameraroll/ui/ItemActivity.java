@@ -397,14 +397,12 @@ public class ItemActivity extends ThemeableActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (theme.isBaseLight()) {
-            int black = ContextCompat.getColor(this, R.color.black);
-            for (int i = 0; i < menu.size(); i++) {
-                MenuItem item = menu.getItem(i);
-                SpannableString s = new SpannableString(item.getTitle());
-                s.setSpan(new ForegroundColorSpan(black), 0, s.length(), 0);
-                item.setTitle(s);
-            }
+        int black = ContextCompat.getColor(this, R.color.black);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            SpannableString s = new SpannableString(item.getTitle());
+            s.setSpan(new ForegroundColorSpan(black), 0, s.length(), 0);
+            item.setTitle(s);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -556,7 +554,7 @@ public class ItemActivity extends ThemeableActivity {
     }
 
     public void showDeleteDialog() {
-        new AlertDialog.Builder(this, theme.getDialogThemeRes())
+        new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.delete_item, albumItem.getType(this)) + "?")
                 .setNegativeButton(getString(R.string.no), null)
                 .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -690,7 +688,7 @@ public class ItemActivity extends ThemeableActivity {
         dialogLayout.setVisibility(View.GONE);
 
         AlertDialog.Builder builder
-                = new AlertDialog.Builder(this, theme.getDialogThemeRes())
+                = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.info))
                 .setView(rootView)
                 .setPositiveButton(R.string.done, null)
@@ -931,16 +929,6 @@ public class ItemActivity extends ThemeableActivity {
         } else {
             finish();
         }
-    }
-
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_PhotoView;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_PhotoView;
     }
 
     @Override

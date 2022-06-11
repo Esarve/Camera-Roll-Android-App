@@ -12,10 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 
 import us.koller.cameraroll.R;
-import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.File_POJO;
 import us.koller.cameraroll.data.models.StorageRoot;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.util.MediaType;
 
 public class FileHolder extends RecyclerView.ViewHolder {
@@ -51,20 +49,20 @@ public class FileHolder extends RecyclerView.ViewHolder {
     public void setSelected(boolean selected) {
         Context context = itemView.getContext();
 
-        Settings s = Settings.getInstance(itemView.getContext());
-        Theme theme = s.getThemeInstance(context);
+//        Settings s = Settings.getInstance(itemView.getContext());
+//        Theme theme = s.getThemeInstance(context);
 
         int color = selected ?
-                theme.getAccentColor(context)
+                ContextCompat.getColor(context, R.color.colorAccent)
                 : ContextCompat.getColor(context, android.R.color.transparent);
         itemView.setBackgroundColor(color);
 
         TextView textView = itemView.findViewById(R.id.text);
-        textView.setTextColor(selected ? theme.getAccentTextColor(context)
-                : theme.getTextColorPrimary(context));
+        textView.setTextColor(selected ? ContextCompat.getColor(context, R.color.colorAccent_text)
+                : ContextCompat.getColor(context, R.color.textColorPrimary));
 
         ImageView folderIndicator = itemView.findViewById(R.id.folder_indicator);
-        folderIndicator.setColorFilter(selected ? theme.getAccentTextColor(context)
-                : theme.getTextColorSecondary(context), PorterDuff.Mode.SRC_IN);
+        folderIndicator.setColorFilter(selected ? ContextCompat.getColor(context, R.color.colorAccent_text)
+                : ContextCompat.getColor(context, R.color.textColorSecondary), PorterDuff.Mode.SRC_IN);
     }
 }

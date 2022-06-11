@@ -31,7 +31,6 @@ import us.koller.cameraroll.data.models.File_POJO;
 import us.koller.cameraroll.data.models.StorageRoot;
 import us.koller.cameraroll.data.provider.FilesProvider;
 import us.koller.cameraroll.data.provider.Provider;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.util.Util;
 
 public class ExcludePathsActivity extends ThemeableActivity {
@@ -89,6 +88,8 @@ public class ExcludePathsActivity extends ThemeableActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        initTheme();
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -170,6 +171,23 @@ public class ExcludePathsActivity extends ThemeableActivity {
         }
 
         Log.d("ExcludedPathsActivity", "onCreate: " + Provider.getExcludedPaths());
+    }
+
+    private void initTheme() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(toolbarColor);
+        toolbar.setTitleTextColor(textColorPrimary);
+
+        //todo: dark light statusbar
+//        if (theme.darkStatusBarIcons() &&
+//                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+//        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int statusBarColor = getStatusBarColor();
+            getWindow().setStatusBarColor(statusBarColor);
+        }
     }
 
     @Override
@@ -322,34 +340,6 @@ public class ExcludePathsActivity extends ThemeableActivity {
         if (filesProvider != null) {
             filesProvider.onDestroy();
         }
-    }
-
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_ExcludePaths;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_ExcludePaths;
-    }
-
-    @Override
-    public void onThemeApplied(Theme theme) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolbarColor);
-        toolbar.setTitleTextColor(textColorPrimary);
-
-        if (theme.darkStatusBarIcons() &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int statusBarColor = getStatusBarColor();
-            getWindow().setStatusBarColor(statusBarColor);
-        }
-
     }
 
     private static class RecyclerViewAdapter extends RecyclerView.Adapter

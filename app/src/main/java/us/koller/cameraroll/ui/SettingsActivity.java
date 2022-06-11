@@ -30,7 +30,7 @@ import us.koller.cameraroll.preferences.ColumnCountPreference;
 import us.koller.cameraroll.preferences.ColumnCountPreferenceDialogFragment;
 import us.koller.cameraroll.preferences.StylePreference;
 import us.koller.cameraroll.preferences.StylePreferenceDialogFragment;
-import us.koller.cameraroll.themes.Theme;
+import us.koller.cameraroll.util.Constants;
 import us.koller.cameraroll.util.Util;
 
 public class SettingsActivity extends ThemeableActivity {
@@ -130,6 +130,18 @@ public class SettingsActivity extends ThemeableActivity {
         });
 
         setSystemUiFlags();
+        initTheme();
+    }
+
+    private void initTheme() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(toolbarColor);
+        toolbar.setTitleTextColor(textColorPrimary);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int statusBarColor = getStatusBarColor();
+            getWindow().setStatusBarColor(statusBarColor);
+        }
     }
 
     @Override
@@ -163,34 +175,6 @@ public class SettingsActivity extends ThemeableActivity {
         super.onBackPressed();
     }
 
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_Settings;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_Settings;
-    }
-
-    @Override
-    public void onThemeApplied(Theme theme) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolbarColor);
-        toolbar.setTitleTextColor(textColorPrimary);
-
-        if (theme.darkStatusBarIcons() &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int statusBarColor = getStatusBarColor();
-            getWindow().setStatusBarColor(statusBarColor);
-        }
-    }
-
-
     public static class SettingsFragment extends PreferenceFragmentCompat
             implements Preference.OnPreferenceChangeListener {
 
@@ -216,7 +200,7 @@ public class SettingsActivity extends ThemeableActivity {
 
             initExcludedPathsPref();
             initVirtualDirectoriesPref();
-            initThemePref(settings.getTheme());
+            initThemePref(settings.getTheme().getCode());
             initStylePref(settings.getStyle(getContext(), false));
             initColumnCountPref(settings.getRealColumnCount());
             initShowVideos(settings.showVideos());
@@ -405,7 +389,7 @@ public class SettingsActivity extends ThemeableActivity {
             Settings settings = Settings.getInstance(getActivity());
             if (preference.getKey().equals(getString(R.string.pref_key_theme))) {
                 String themeValue = (String) o;
-                settings.setTheme(themeValue);
+                settings.setTheme(Constants.THEMES.lookupByCode(themeValue));
 
                 String theme_name = Settings.Utils.getThemeName(getActivity(), themeValue);
                 preference.setSummary(theme_name);

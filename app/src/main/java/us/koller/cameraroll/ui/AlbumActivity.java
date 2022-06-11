@@ -63,7 +63,6 @@ import us.koller.cameraroll.data.models.File_POJO;
 import us.koller.cameraroll.data.models.VirtualAlbum;
 import us.koller.cameraroll.data.provider.MediaProvider;
 import us.koller.cameraroll.data.provider.Provider;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.ui.widget.FastScrollerRecyclerView;
 import us.koller.cameraroll.ui.widget.GridMarginDecoration;
 import us.koller.cameraroll.ui.widget.SwipeBackCoordinatorLayout;
@@ -142,6 +141,7 @@ public class AlbumActivity extends ThemeableActivity
 
         MediaProvider.checkPermission(this);
 
+        initTheme();
         setExitSharedElementCallback(mCallback);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setEnterTransition(new TransitionSet()
@@ -192,7 +192,6 @@ public class AlbumActivity extends ThemeableActivity
                 DrawableCompat.setTint(navIcon.mutate(), accentTextColor);
                 toolbar.setNavigationIcon(navIcon);
             }
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
             Util.colorToolbarOverflowMenuIcon(toolbar, accentTextColor);
         }
 
@@ -206,7 +205,6 @@ public class AlbumActivity extends ThemeableActivity
                 }
             }
         });
-
         recyclerView = findViewById(R.id.recyclerView);
         final int columnCount = Settings.getInstance(this).getColumnCount(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, columnCount);
@@ -236,25 +234,26 @@ public class AlbumActivity extends ThemeableActivity
                 float translationY = toolbar.getTranslationY() - dy;
                 if (-translationY > toolbar.getHeight()) {
                     translationY = -toolbar.getHeight();
-                    if (theme.elevatedToolbar()) {
+
+                    //todo: elevatedToolbar => Light theme = true, Dark theme = false
+                    if (true) {
                         toolbar.setActivated(true);
                     }
                 } else if (translationY > 0) {
                     translationY = 0;
-                    if (theme.elevatedToolbar() &&
-                            !recyclerView.canScrollVertically(-1)) {
+                    if (!recyclerView.canScrollVertically(-1)) { //todo: elevated
                         toolbar.setActivated(false);
                     }
                 }
                 toolbar.setTranslationY(translationY);
 
                 //animate statusBarIcon color
-                if (theme.darkStatusBarIcons()) {
+                if (true) { //todo: dark statusbar
                     float animatedValue = (-translationY) / toolbar.getHeight();
                     if (animatedValue > 0.9f) {
-                        Util.setLightStatusBarIcons(findViewById(R.id.root_view));
+                        //todo: light statusbar
                     } else {
-                        Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+                        //todo: darkstatusbar
                     }
                 }
             }
@@ -374,6 +373,19 @@ public class AlbumActivity extends ThemeableActivity
                     }
                 });
 
+    }
+
+    private void initTheme() {
+        if (pick_photos) {
+            return;
+        }
+
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(toolbarColor);
+        toolbar.setTitleTextColor(textColorPrimary);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setBackgroundTintList(ColorStateList.valueOf(accentColor));
     }
 
     private void onAlbumLoaded(Bundle savedInstanceState) {
@@ -762,11 +774,12 @@ public class AlbumActivity extends ThemeableActivity
         toolbar.setActivated(true);
         toolbar.animate().translationY(0.0f).start();
 
-        if (theme.darkStatusBarIconsInSelectorMode()) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        } else {
-            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
-        }
+        //todo: light dark statusbar
+//        if (theme.darkStatusBarIconsInSelectorMode()) {
+//            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+//        } else {
+//            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
+//        }
 
         if (!pick_photos) {
             ColorFade.fadeBackgroundColor(toolbar, toolbarColor, accentColor);
@@ -829,12 +842,12 @@ public class AlbumActivity extends ThemeableActivity
         }
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setActivated(theme.elevatedToolbar());
+        toolbar.setActivated(true); //elevated BS
 
-        if (theme.darkStatusBarIcons()) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+        if (true) { //todo: dark statusbar
+            //todo: darkstatusbar
         } else {
-            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
+            //todo: lightstatusbar
         }
 
         ColorDrawable statusBarOverlay = getStatusBarOverlay();
@@ -925,7 +938,7 @@ public class AlbumActivity extends ThemeableActivity
         //deleteAlbumItemsSnackbar();
         final String[] selected_items = recyclerViewAdapter
                 .cancelSelectorMode(AlbumActivity.this);
-        new AlertDialog.Builder(AlbumActivity.this, theme.getDialogThemeRes())
+        new AlertDialog.Builder(AlbumActivity.this)
                 .setTitle(getString(R.string.delete_files, selected_items.length) + "?")
                 .setNegativeButton(getString(R.string.no), null)
                 .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -1064,16 +1077,16 @@ public class AlbumActivity extends ThemeableActivity
         getWindow().getDecorView().setBackgroundColor(
                 SwipeBackCoordinatorLayout.getBackgroundColor(percent));
         boolean selectorModeActive = recyclerViewAdapter.isSelectorModeActive();
-        if (!theme.darkStatusBarIcons() && selectorModeActive) {
+        if (selectorModeActive) {
             SwipeBackCoordinatorLayout layout = findViewById(R.id.swipeBackView);
             Toolbar toolbar = findViewById(R.id.toolbar);
             View rootView = findViewById(R.id.root_view);
             int translationY = (int) layout.getTranslationY();
             int statusBarHeight = toolbar.getPaddingTop();
             if (translationY > statusBarHeight * 0.5) {
-                Util.setLightStatusBarIcons(rootView);
+                //todo: lightstatusbar
             } else {
-                Util.setDarkStatusBarIcons(rootView);
+                //todo: darkstatusbar
             }
         }
     }
@@ -1091,40 +1104,6 @@ public class AlbumActivity extends ThemeableActivity
                     .setInterpolator(new AccelerateDecelerateInterpolator()));
         }
         finish();
-    }
-
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_Translucent_Album;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_Translucent_Album;
-    }
-
-    @Override
-    public void onThemeApplied(Theme theme) {
-        if (pick_photos) {
-            return;
-        }
-
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolbarColor);
-        toolbar.setTitleTextColor(textColorPrimary);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setBackgroundTintList(ColorStateList.valueOf(accentColor));
-
-        if (theme.darkStatusBarIcons()) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        } else {
-            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
-        }
-
-        if (theme.statusBarOverlay()) {
-            addStatusBarOverlay(toolbar);
-        }
     }
 
     @Override

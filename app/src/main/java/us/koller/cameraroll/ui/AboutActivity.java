@@ -55,7 +55,7 @@ public class AboutActivity extends ThemeableActivity
         }
 
         final View header = findViewById(R.id.header);
-        header.setBackgroundColor(theme.getAccentColor(this));
+        header.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
 
         TextView version = findViewById(R.id.version);
         try {
@@ -65,7 +65,7 @@ public class AboutActivity extends ThemeableActivity
                     .getPackageInfo(getPackageName(), 0).versionCode;
             //noinspection deprecation
             version.setText(Html.fromHtml(versionName));
-            version.setTextColor(theme.getAccentTextColor(this));
+            version.setTextColor(ContextCompat.getColor(this, R.color.colorAccent_text));
             version.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -91,16 +91,16 @@ public class AboutActivity extends ThemeableActivity
                                        int oldScrollX, int oldScrollY) {
                 int statusBarHeight = toolbar.getPaddingTop();
                 if (scrollY > header.getHeight() - statusBarHeight / 2) {
-                    if (theme.darkStatusBarIcons()) {
-                        Util.setDarkStatusBarIcons(rootView);
+                    if (true) {
+                        //todo: darkstatusbar
                     } else {
-                        Util.setLightStatusBarIcons(rootView);
+                        //todo: lightstatusbar
                     }
                 } else {
-                    if (theme.darkStatusBarIconsInSelectorMode()) {
-                        Util.setDarkStatusBarIcons(rootView);
+                    if (true) {
+                        //todo: darkstatusbar
                     } else {
-                        Util.setLightStatusBarIcons(rootView);
+                        //todo: lightstatusbar
                     }
                 }
             }
@@ -133,11 +133,6 @@ public class AboutActivity extends ThemeableActivity
                     return insets.consumeSystemWindowInsets();
                 }
             });
-
-            //set status bar icon color
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
         } else {
             rootView.getViewTreeObserver()
                     .addOnGlobalLayoutListener(
@@ -175,7 +170,7 @@ public class AboutActivity extends ThemeableActivity
             if (toolbar.getChildAt(i) instanceof ImageView) {
                 ImageView imageView = ((ImageView) toolbar.getChildAt(i));
                 int color;
-                if (!theme.darkStatusBarIconsInSelectorMode()) {
+                if (true) {
                     color = ContextCompat.getColor(this, R.color.white_translucent1);
                 } else {
                     color = ContextCompat.getColor(this, R.color.black_translucent2);
@@ -216,10 +211,10 @@ public class AboutActivity extends ThemeableActivity
         int translationY = (int) layout.getTranslationY();
         int statusBarHeight = toolbar.getPaddingTop();
         if (translationY > statusBarHeight * 0.5) {
-            if (theme.darkStatusBarIcons()) {
-                Util.setDarkStatusBarIcons(rootView);
+            if (true) {
+                //todo: darkstatusbar
             } else {
-                Util.setLightStatusBarIcons(rootView);
+                //todo: light
             }
         }
     }
@@ -232,16 +227,6 @@ public class AboutActivity extends ThemeableActivity
                     .setInterpolator(new AccelerateDecelerateInterpolator()));
         }
         onBackPressed();
-    }
-
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_Translucent_About;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Translucent_Light_About;
     }
 
     @Override

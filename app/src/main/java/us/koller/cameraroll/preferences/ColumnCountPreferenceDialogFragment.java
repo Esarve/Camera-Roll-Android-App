@@ -11,12 +11,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 
 import us.koller.cameraroll.R;
 import us.koller.cameraroll.data.Settings;
-import us.koller.cameraroll.themes.Theme;
+
 
 public class ColumnCountPreferenceDialogFragment
         extends DialogFragment implements DialogInterface.OnClickListener {
@@ -62,8 +63,8 @@ public class ColumnCountPreferenceDialogFragment
             }
         };
 
-        Theme theme = Settings.getInstance(getContext()).getThemeInstance(getContext());
-        int textColorSec = theme.getTextColorSecondary(getContext());
+//        Theme theme = Settings.getInstance(getContext()).getThemeInstance(getContext());
+        int textColorSec = ContextCompat.getColor(requireContext(), R.color.textColorSecondary);
 
         ImageButton minus = view.findViewById(R.id.minus);
         minus.setColorFilter(textColorSec);
@@ -73,7 +74,7 @@ public class ColumnCountPreferenceDialogFragment
         plus.setColorFilter(textColorSec);
         plus.setOnClickListener(onClickListener);
 
-        return new AlertDialog.Builder(getContext())
+        return new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.column_count)
                 .setView(view)
                 .setPositiveButton(R.string.ok, this)

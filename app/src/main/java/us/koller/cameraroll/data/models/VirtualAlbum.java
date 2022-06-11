@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +29,6 @@ import java.util.Arrays;
 import us.koller.cameraroll.R;
 import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.provider.Provider;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.util.SortUtil;
 
 public class VirtualAlbum extends Album {
@@ -177,9 +177,9 @@ public class VirtualAlbum extends Album {
 
             final EditText editText = dialogLayout.findViewById(R.id.edit_text);
 
-            Theme theme = Settings.getInstance(context).getThemeInstance(context);
+//            Theme theme = Settings.getInstance(context).getThemeInstance(context);
 
-            final AlertDialog dialog = new AlertDialog.Builder(context, theme.getDialogThemeRes())
+            final AlertDialog dialog = new AlertDialog.Builder(context, R.style.CameraRoll_Theme_Dialog)
                     .setTitle(R.string.create_virtual_album)
                     .setView(dialogLayout)
                     .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
@@ -224,9 +224,9 @@ public class VirtualAlbum extends Album {
             View dialogLayout = LayoutInflater.from(context)
                     .inflate(R.layout.add_to_virtual_album_dialog, null, false);
 
-            Theme theme = Settings.getInstance(context).getThemeInstance(context);
+//            Theme theme = Settings.getInstance(context).getThemeInstance(context);
 
-            final AlertDialog dialog = new AlertDialog.Builder(context, theme.getDialogThemeRes())
+            final AlertDialog dialog = new AlertDialog.Builder(context, R.style.CameraRoll_Theme_Dialog)
                     .setTitle(R.string.add_path_to_virtual_album)
                     .setView(dialogLayout)
                     .setNeutralButton(R.string.create_virtual_album, new DialogInterface.OnClickListener() {
@@ -303,8 +303,8 @@ public class VirtualAlbum extends Album {
                     this.callback = callback;
 
                     Context context = itemView.getContext();
-                    Theme theme = Settings.getInstance(context).getThemeInstance(context);
-                    int accentColor = theme.getAccentColor(context);
+//                    Theme theme = Settings.getInstance(context).getThemeInstance(context);
+                    int accentColor = ContextCompat.getColor(context, R.color.colorAccent);
 
                     textView = itemView.findViewById(R.id.text);
                     textView.setTextColor(accentColor);

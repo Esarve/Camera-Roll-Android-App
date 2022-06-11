@@ -16,9 +16,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.exifinterface.media.ExifInterface;
@@ -33,7 +33,7 @@ import java.util.Locale;
 
 import us.koller.cameraroll.R;
 import us.koller.cameraroll.data.Settings;
-import us.koller.cameraroll.themes.Theme;
+
 
 public class Util {
 
@@ -121,34 +121,6 @@ public class Util {
         return null;
     }
 
-    public static void setDarkStatusBarIcons(final View v) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            v.post(new Runnable() {
-                @Override
-                @RequiresApi(api = Build.VERSION_CODES.M)
-                public void run() {
-                    v.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                }
-            });
-        }
-    }
-
-    public static void setLightStatusBarIcons(final View v) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            v.post(new Runnable() {
-                @Override
-                public void run() {
-                    v.setSystemUiVisibility(0);
-                }
-            });
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static boolean areStatusBarIconsDark(final View v) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && v.getSystemUiVisibility() != 0;
-    }
-
     public static void showSnackbar(Snackbar snackbar) {
         snackbar.getView().setTag(SNACKBAR);
 //        TextView textView = snackbar.getView()
@@ -204,9 +176,9 @@ public class Util {
 
     private static Drawable tintDrawableWithAccentColor(Context context, Drawable d) {
         Settings s = Settings.getInstance(context);
-        Theme theme = s.getThemeInstance(context);
+//        Theme theme = s.getThemeInstance(context);
 
-        int tintColor = theme.getAccentColorLight(context);
+        int tintColor = ContextCompat.getColor(context, R.color.colorAccent);
         d = DrawableCompat.wrap(d);
         DrawableCompat.setTint(d, tintColor);
         return d;

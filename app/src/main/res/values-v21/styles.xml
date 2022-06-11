@@ -1,31 +1,9 @@
 <resources>
     <!--Base Theme-->
-    <style name="CameraRoll.Theme" parent="Theme.AppCompat.NoActionBar">
+    <style name="CameraRoll.Theme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="android:windowTranslucentNavigation">@bool/show_nav_bar</item>
-        <item name="android:windowTranslucentStatus">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-
-        <item name="android:windowContentTransitions">true</item>
-    </style>
-
-    <style name="CameraRoll.Theme.Light" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary_light</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark_light</item>
-        <item name="colorAccent">@color/colorAccent_light</item>
-
-        <item name="android:windowTranslucentNavigation">@bool/show_nav_bar</item>
-        <item name="android:windowTranslucentStatus">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-
-        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <!--PhotoView Theme-->
@@ -43,30 +21,9 @@
         <item name="android:textColorSecondary">@color/white_translucent1</item>
     </style>
 
-    <style name="CameraRoll.Theme.Light.PhotoView" parent="CameraRoll.Theme.Light">
-        <item name="android:windowBackground">@color/black</item>
-
-        <item name="android:windowSharedElementEnterTransition">@transition/album_item_transition
-        </item>
-        <item name="android:windowSharedElementExitTransition">@transition/album_item_transition
-        </item>
-
-        <item name="android:windowTranslucentNavigation">false</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white_translucent1</item>
-    </style>
 
     <!--VideoPlayer Theme-->
     <style name="CameraRoll.Theme.VideoPlayer" parent="CameraRoll.Theme">
-        <item name="android:windowBackground">@color/black</item>
-        <item name="android:windowTranslucentNavigation">false</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white_translucent1</item>
-    </style>
-
-    <style name="CameraRoll.Theme.Light.VideoPlayer" parent="CameraRoll.Theme.Light">
         <item name="android:windowBackground">@color/black</item>
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
@@ -81,20 +38,11 @@
         <item name="android:windowTranslucentNavigation">false</item>
     </style>
 
-    <style name="CameraRoll.Theme.Light.Settings" parent="CameraRoll.Theme.Light">
-        <item name="android:windowBackground">@null</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="android:windowTranslucentNavigation">false</item>
-    </style>
-
     <!--ExifEditor Theme-->
     <style name="CameraRoll.Theme.ExifEditor" parent="CameraRoll.Theme">
         <item name="android:windowBackground">@null</item>
     </style>
 
-    <style name="CameraRoll.Theme.Light.ExifEditor" parent="CameraRoll.Theme.Light">
-        <item name="android:windowBackground">@null</item>
-    </style>
 
     <!--EditImage Theme-->
     <style name="CameraRoll.Theme.EditImage" parent="CameraRoll.Theme">
@@ -115,16 +63,15 @@
         <item name="android:windowBackground">@null</item>
     </style>
 
-    <style name="CameraRoll.Theme.Light.ExcludePaths" parent="CameraRoll.Theme.Light">
-        <item name="android:windowBackground">@null</item>
-    </style>
-
     <!--VirtualDirectories Theme-->
     <style name="CameraRoll.Theme.VirtualDirectories" parent="CameraRoll.Theme">
         <item name="android:windowBackground">@null</item>
     </style>
 
-    <style name="CameraRoll.Theme.Light.VirtualDirectories" parent="CameraRoll.Theme.Light">
-        <item name="android:windowBackground">@null</item>
+    <style name="CameraRoll.Theme.Main" parent="CameraRoll.Theme">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
 </resources>

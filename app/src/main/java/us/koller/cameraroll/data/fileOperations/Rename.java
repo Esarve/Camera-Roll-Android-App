@@ -20,9 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import us.koller.cameraroll.R;
-import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.File_POJO;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.ui.BaseActivity;
 import us.koller.cameraroll.util.StorageUtil;
 
@@ -145,8 +143,8 @@ public class Rename extends FileOperation {
                                                   final File_POJO file,
                                                   final BroadcastReceiver broadcastReceiver) {
 
-            Theme theme = Settings.getInstance(activity).getThemeInstance(activity);
-            ContextThemeWrapper wrapper = new ContextThemeWrapper(activity, theme.getDialogThemeRes());
+//            Theme theme = Settings.getInstance(activity).getThemeInstance(activity);
+            ContextThemeWrapper wrapper = new ContextThemeWrapper(activity, R.style.CameraRoll_Theme_Dialog);
 
             @SuppressLint("InflateParams")
             View dialogLayout = LayoutInflater.from(wrapper)

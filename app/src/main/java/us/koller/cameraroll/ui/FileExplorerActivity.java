@@ -61,7 +61,6 @@ import us.koller.cameraroll.data.models.StorageRoot;
 import us.koller.cameraroll.data.models.VirtualAlbum;
 import us.koller.cameraroll.data.provider.FilesProvider;
 import us.koller.cameraroll.data.provider.Provider;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.ui.widget.SwipeBackCoordinatorLayout;
 import us.koller.cameraroll.util.Util;
 import us.koller.cameraroll.util.animators.ColorFade;
@@ -118,6 +117,7 @@ public class FileExplorerActivity extends ThemeableActivity
         toolbar.setBackgroundColor(toolbarColor);
         toolbar.setTitleTextColor(textColorPrimary);
 
+        initTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && showAnimations()) {
             AnimatedVectorDrawable drawable = (AnimatedVectorDrawable)
                     ContextCompat.getDrawable(FileExplorerActivity.this, R.drawable.back_to_cancel_avd);
@@ -315,6 +315,25 @@ public class FileExplorerActivity extends ThemeableActivity
                     })
                     .show();*/
         }
+    }
+
+    private void initTheme() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setBackgroundTintList(ColorStateList.valueOf(accentColor));
+
+        //todo: handle these stuffs here
+//        if (theme.darkStatusBarIcons()) {
+//            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+//        } else {
+//            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
+//        }
+//
+//        final Toolbar toolbar = findViewById(R.id.toolbar);
+//        toolbar.setActivated(theme.elevatedToolbar());
+//
+//        if (theme.statusBarOverlay()) {
+//            addStatusBarOverlay(toolbar);
+//        }
     }
 
     public void loadRoots() {
@@ -552,7 +571,7 @@ public class FileExplorerActivity extends ThemeableActivity
 
         final EditText editText = dialogLayout.findViewById(R.id.edit_text);
 
-        AlertDialog dialog = new AlertDialog.Builder(this, theme.getDialogThemeRes())
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.CameraRoll_Theme_Dialog)
                 .setTitle(R.string.new_folder)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
@@ -667,16 +686,16 @@ public class FileExplorerActivity extends ThemeableActivity
         getWindow().getDecorView().setBackgroundColor(
                 SwipeBackCoordinatorLayout.getBackgroundColor(percent));
         boolean selectorModeActive = ((FileExplorerAdapter) recyclerView.getAdapter()).isModeActive();
-        if (!theme.darkStatusBarIcons() && selectorModeActive) {
+        if (selectorModeActive)  { //some shits about dark and light statusbar was here
             SwipeBackCoordinatorLayout layout = findViewById(R.id.swipeBackView);
             Toolbar toolbar = findViewById(R.id.toolbar);
             View rootView = findViewById(R.id.root_view);
             int translationY = (int) layout.getTranslationY();
-            int statusBarHeight = toolbar.getPaddingTop();
-            if (translationY > statusBarHeight * 0.5) {
-                Util.setLightStatusBarIcons(rootView);
+            int statusBarnHeight = toolbar.getPaddingTop();
+            if (translationY > statusBarnHeight * 0.5) {
+                //todo: light statusbar
             } else {
-                Util.setDarkStatusBarIcons(rootView);
+                //todo: dark statusbarn
             }
         }
     }
@@ -701,11 +720,13 @@ public class FileExplorerActivity extends ThemeableActivity
         toolbar.setActivated(true);
         toolbar.animate().translationY(0.0f).start();
 
-        if (theme.darkStatusBarIconsInSelectorMode()) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        } else {
-            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
-        }
+        //todo: dark and light statusbar
+
+//        if (theme.darkStatusBarIconsInSelectorMode()) {
+//            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+//        } else {
+//            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
+//        }
 
         ColorDrawable statusBarOverlay = getStatusBarOverlay();
         if (statusBarOverlay != null) {
@@ -779,7 +800,7 @@ public class FileExplorerActivity extends ThemeableActivity
                         title = getString(R.string.delete_files, count);
                     }
 
-                    new AlertDialog.Builder(this, theme.getDialogThemeRes())
+                    new AlertDialog.Builder(this, R.style.CameraRoll_Theme_Dialog)
                             .setTitle(title)
                             .setNegativeButton(getString(R.string.no), null)
                             .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -922,11 +943,12 @@ public class FileExplorerActivity extends ThemeableActivity
     public void resetToolbar() {
         final Toolbar toolbar = findViewById(R.id.toolbar);
 
-        if (theme.darkStatusBarIcons()) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        } else {
-            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
-        }
+        //todo: light dark statusbar
+//        if (theme.darkStatusBarIcons()) {
+//            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+//        } else {
+//            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
+//        }
 
         ColorDrawable statusBarOverlay = getStatusBarOverlay();
         if (statusBarOverlay != null) {
@@ -934,7 +956,8 @@ public class FileExplorerActivity extends ThemeableActivity
             ColorFade.fadeDrawableAlpha(statusBarOverlay, alpha);
         }
 
-        toolbar.setActivated(theme.elevatedToolbar());
+        //todo: elevated shit
+//        toolbar.setActivated(theme.elevatedToolbar());
 
         ColorFade.fadeBackgroundColor(toolbar, accentColor, toolbarColor);
         ColorFade.fadeToolbarTitleColor(toolbar, textColorPrimary,
@@ -989,34 +1012,6 @@ public class FileExplorerActivity extends ThemeableActivity
         }, navIcon instanceof Animatable ? (int) (500 * Util.getAnimatorSpeed(this)) : 0);
     }
 
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_Translucent_FileExplorer;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_Translucent_FileExplorer;
-    }
-
-    @Override
-    public void onThemeApplied(Theme theme) {
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setBackgroundTintList(ColorStateList.valueOf(accentColor));
-
-        if (theme.darkStatusBarIcons()) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        } else {
-            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
-        }
-
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setActivated(theme.elevatedToolbar());
-
-        if (theme.statusBarOverlay()) {
-            addStatusBarOverlay(toolbar);
-        }
-    }
 
     @Override
     public BroadcastReceiver getDefaultLocalBroadcastReceiver() {

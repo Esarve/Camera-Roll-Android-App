@@ -22,16 +22,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import us.koller.cameraroll.R;
-import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.VirtualAlbum;
 import us.koller.cameraroll.data.provider.Provider;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.util.Util;
 
 public class VirtualAlbumsActivity extends ThemeableActivity {
@@ -62,8 +61,8 @@ public class VirtualAlbumsActivity extends ThemeableActivity {
             emptyStateText.setVisibility(View.VISIBLE);
         }
 
-        final int accentColor = theme.getAccentColor(this);
-        final int toolbarTitleColor = theme.getTextColorPrimary(this);
+        final int accentColor = ContextCompat.getColor(this,R.color.colorAccent);
+        final int toolbarTitleColor = ContextCompat.getColor(this, R.color.textColorPrimary);
         final String toolbarTitle = String.valueOf(toolbar.getTitle());
 
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -206,33 +205,6 @@ public class VirtualAlbumsActivity extends ThemeableActivity {
         Provider.saveVirtualAlbums(this);
     }
 
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_VirtualDirectories;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_VirtualDirectories;
-    }
-
-    @Override
-    public void onThemeApplied(Theme theme) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolbarColor);
-        toolbar.setTitleTextColor(textColorPrimary);
-
-        if (theme.darkStatusBarIcons() &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int statusBarColor = getStatusBarColor();
-            getWindow().setStatusBarColor(statusBarColor);
-        }
-    }
-
     private static class RecyclerViewAdapter extends RecyclerView.Adapter {
 
         private static final int VIRTUAL_ALBUM_VIEW_TYPE = 1;
@@ -248,9 +220,6 @@ public class VirtualAlbumsActivity extends ThemeableActivity {
         }
 
         private static abstract class ViewHolder extends RecyclerView.ViewHolder {
-
-            private Theme theme;
-
             TextView textView;
             ImageView deleteButton;
             ImageView folderIndicator;
@@ -258,19 +227,15 @@ public class VirtualAlbumsActivity extends ThemeableActivity {
             public ViewHolder(View itemView) {
                 super(itemView);
                 Context context = itemView.getContext();
-                theme = Settings.getInstance(context).getThemeInstance(context);
 
                 textView = itemView.findViewById(R.id.text);
                 deleteButton = itemView.findViewById(R.id.delete_button);
-                int secondaryTextColor = theme.getTextColorSecondary(context);
+                int secondaryTextColor = ContextCompat.getColor(context,R.color.textColorSecondary);
                 deleteButton.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
 
                 folderIndicator = itemView.findViewById(R.id.folder_indicator);
             }
 
-            public Theme getTheme() {
-                return theme;
-            }
         }
 
         private static class VirtualAlbumHolder extends ViewHolder {
@@ -278,8 +243,7 @@ public class VirtualAlbumsActivity extends ThemeableActivity {
             VirtualAlbumHolder(View itemView) {
                 super(itemView);
                 Context context = itemView.getContext();
-                Theme theme = getTheme();
-                int accentColor = theme.getAccentColor(context);
+                int accentColor = ContextCompat.getColor(context,R.color.colorAccent);
                 textView.setTextColor(accentColor);
                 folderIndicator.setColorFilter(accentColor, PorterDuff.Mode.SRC_IN);
             }
@@ -293,9 +257,8 @@ public class VirtualAlbumsActivity extends ThemeableActivity {
 
             PathHolder(View itemView) {
                 super(itemView);
-                Theme theme = getTheme();
 
-                int secondaryTextColor = theme.getTextColorSecondary(itemView.getContext());
+                int secondaryTextColor = ContextCompat.getColor(itemView.getContext(), R.color.textColorSecondary);
                 folderIndicator.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
             }
 

@@ -52,7 +52,6 @@ import us.koller.cameraroll.data.models.Album;
 import us.koller.cameraroll.data.provider.MediaProvider;
 import us.koller.cameraroll.styles.NestedRecyclerView;
 import us.koller.cameraroll.styles.Style;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.ui.widget.FastScrollerRecyclerView;
 import us.koller.cameraroll.ui.widget.GridMarginDecoration;
 import us.koller.cameraroll.ui.widget.ParallaxImageView;
@@ -171,8 +170,8 @@ public class MainActivity extends ThemeableActivity {
             });
 
             Util.colorToolbarOverflowMenuIcon(toolbar, accentTextColor);
-            if (theme.darkStatusBarIconsInSelectorMode()) {
-                Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+            if (true) { //todo: dark statusbar select or yada yada
+                //todo: darkstatusbar
             }
         } else {
             if (actionBar != null) {
@@ -180,6 +179,7 @@ public class MainActivity extends ThemeableActivity {
             }
         }
 
+        initTheme();
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setTag(ParallaxImageView.RECYCLER_VIEW_TAG);
         SelectorModeManager.Callback callback = new SelectorModeManager.SimpleCallback() {
@@ -239,13 +239,12 @@ public class MainActivity extends ThemeableActivity {
                 float translationY = toolbar.getTranslationY() - dy;
                 if (-translationY > toolbar.getHeight()) {
                     translationY = -toolbar.getHeight();
-                    if (theme.elevatedToolbar()) {
+                    if (true) { //todo: elevated toolbar or something
                         toolbar.setActivated(true);
                     }
                 } else if (translationY > 0) {
                     translationY = 0;
-                    if (theme.elevatedToolbar() &&
-                            !recyclerView.canScrollVertically(-1)) {
+                    if (!recyclerView.canScrollVertically(-1)) {  //todo: elevated toolbar or something
                         toolbar.setActivated(false);
                     }
                 }
@@ -254,14 +253,13 @@ public class MainActivity extends ThemeableActivity {
                 //animate statusBarIcon color
                 boolean selectorModeActive = recyclerViewAdapter
                         .getSelectorManager().isSelectorModeActive();
-                if (!selectorModeActive && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                        && theme.isBaseLight()) {
+                if (!selectorModeActive && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //todo: also something was about light and dark theme
                     //only animate statusBar icons color, when not in selectorMode
                     float animatedValue = (-translationY) / toolbar.getHeight();
                     if (animatedValue > 0.9f) {
-                        Util.setLightStatusBarIcons(findViewById(R.id.root_view));
+                        //todo: ligt
                     } else {
-                        Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+                        //todo: darkstatusbar
                     }
                 }
             }
@@ -372,6 +370,28 @@ public class MainActivity extends ThemeableActivity {
 
         //needed for transparent statusBar
         setSystemUiFlags();
+    }
+
+    private void initTheme() {
+        if (pick_photos) {
+            return;
+        }
+
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(toolbarColor);
+        toolbar.setTitleTextColor(textColorPrimary);
+
+        //todo: handle BS
+
+//        if (theme.darkStatusBarIcons()) {
+//            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
+//        } else {
+//            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
+//        }
+//
+//        if (theme.statusBarOverlay()) {
+//            addStatusBarOverlay(toolbar);
+//        }
     }
 
     @Override
@@ -777,37 +797,6 @@ public class MainActivity extends ThemeableActivity {
 
         if (observer != null) {
             observer.unregister(this);
-        }
-    }
-
-    @Override
-    public int getDarkThemeRes() {
-        return R.style.CameraRoll_Theme_Main;
-    }
-
-    @Override
-    public int getLightThemeRes() {
-        return R.style.CameraRoll_Theme_Light_Main;
-    }
-
-    @Override
-    public void onThemeApplied(Theme theme) {
-        if (pick_photos) {
-            return;
-        }
-
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolbarColor);
-        toolbar.setTitleTextColor(textColorPrimary);
-
-        if (theme.darkStatusBarIcons()) {
-            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-        } else {
-            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
-        }
-
-        if (theme.statusBarOverlay()) {
-            addStatusBarOverlay(toolbar);
         }
     }
 

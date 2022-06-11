@@ -38,12 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.koller.cameraroll.R;
-import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.AlbumItem;
 import us.koller.cameraroll.data.models.Gif;
 import us.koller.cameraroll.data.models.Photo;
 import us.koller.cameraroll.data.models.Video;
-import us.koller.cameraroll.themes.Theme;
 import us.koller.cameraroll.util.ExifUtil;
 import us.koller.cameraroll.util.InfoUtil;
 import us.koller.cameraroll.util.MediaType;
@@ -228,10 +226,10 @@ public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
 
         void setTextColors() {
             Context context = type.getContext();
-            Theme theme = Settings.getInstance(context).getThemeInstance(context);
-            type.setTextColor(theme.getTextColorSecondary(context));
-            value.setTextColor(theme.getTextColorPrimary(context));
-            icon.setColorFilter(theme.getTextColorPrimary(context));
+//            Theme theme = Settings.getInstance(context).getThemeInstance(context);
+            type.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+            value.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
+            icon.setColorFilter(ContextCompat.getColor(context, R.color.textColorPrimary));
         }
     }
 
@@ -585,8 +583,8 @@ public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
 
                 int getColor() {
                     Context context = itemView.getContext();
-                    Theme theme = Settings.getInstance(context).getThemeInstance(context);
-                    return theme.getTextColorSecondary(context);
+//                    Theme theme = Settings.getInstance(context).getThemeInstance(context);
+                    return ContextCompat.getColor(context, R.color.textColorSecondary);
                 }
 
                 @Override
