@@ -17,12 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowInsets;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.app.SharedElementCallback;
@@ -38,6 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import us.koller.cameraroll.R;
 import us.koller.cameraroll.adapter.AbstractRecyclerViewAdapter;
@@ -146,40 +144,41 @@ public class MainActivity extends ThemeableActivity {
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(!pick_photos ? toolbarColor : accentColor);
-        toolbar.setTitleTextColor(!pick_photos ? textColorPrimary : accentTextColor);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+//        toolbar.setBackgroundColor(!pick_photos ? toolbarColor : accentColor);
+//        toolbar.setTitleTextColor(!pick_photos ? textColorPrimary : accentTextColor);
+//
+//        ActionBar actionBar = getSupportActionBar();
+//        if (pick_photos) {
+//            if (actionBar != null) {
+//                actionBar.setTitle(allowMultiple ? getString(R.string.pick_photos) : getString(R.string.pick_photo));
+//            }
+//            toolbar.setActivated(true);
+//            toolbar.setNavigationIcon(R.drawable.ic_clear_white);
+//            Drawable navIcon = toolbar.getNavigationIcon();
+//            if (navIcon != null) {
+//                navIcon = DrawableCompat.wrap(navIcon);
+//                DrawableCompat.setTint(navIcon.mutate(), accentTextColor);
+//                toolbar.setNavigationIcon(navIcon);
+//            }
+//            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    finish();
+//                }
+//            });
+//
+//            Util.colorToolbarOverflowMenuIcon(toolbar, accentTextColor);
+//            if (true) { //todo: dark statusbar select or yada yada
+//                //todo: darkstatusbar
+//            }
+//        } else {
+//            if (actionBar != null) {
+//                actionBar.setTitle(getString(R.string.toolbar_title));
+//            }
+//        }
 
-        ActionBar actionBar = getSupportActionBar();
-        if (pick_photos) {
-            if (actionBar != null) {
-                actionBar.setTitle(allowMultiple ? getString(R.string.pick_photos) : getString(R.string.pick_photo));
-            }
-            toolbar.setActivated(true);
-            toolbar.setNavigationIcon(R.drawable.ic_clear_white);
-            Drawable navIcon = toolbar.getNavigationIcon();
-            if (navIcon != null) {
-                navIcon = DrawableCompat.wrap(navIcon);
-                DrawableCompat.setTint(navIcon.mutate(), accentTextColor);
-                toolbar.setNavigationIcon(navIcon);
-            }
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
 
-            Util.colorToolbarOverflowMenuIcon(toolbar, accentTextColor);
-            if (true) { //todo: dark statusbar select or yada yada
-                //todo: darkstatusbar
-            }
-        } else {
-            if (actionBar != null) {
-                actionBar.setTitle(getString(R.string.toolbar_title));
-            }
-        }
-
-        initTheme();
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setTag(ParallaxImageView.RECYCLER_VIEW_TAG);
         SelectorModeManager.Callback callback = new SelectorModeManager.SimpleCallback() {
@@ -225,45 +224,45 @@ public class MainActivity extends ThemeableActivity {
             recyclerViewAdapter.setSelectorModeManager(manager);
         }
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (pick_photos) {
-                    return;
-                }
-
-                //hiding toolbar on scroll
-                float translationY = toolbar.getTranslationY() - dy;
-                if (-translationY > toolbar.getHeight()) {
-                    translationY = -toolbar.getHeight();
-                    if (true) { //todo: elevated toolbar or something
-                        toolbar.setActivated(true);
-                    }
-                } else if (translationY > 0) {
-                    translationY = 0;
-                    if (!recyclerView.canScrollVertically(-1)) {  //todo: elevated toolbar or something
-                        toolbar.setActivated(false);
-                    }
-                }
-                toolbar.setTranslationY(translationY);
-
-                //animate statusBarIcon color
-                boolean selectorModeActive = recyclerViewAdapter
-                        .getSelectorManager().isSelectorModeActive();
-                if (!selectorModeActive && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //todo: also something was about light and dark theme
-                    //only animate statusBar icons color, when not in selectorMode
-                    float animatedValue = (-translationY) / toolbar.getHeight();
-                    if (animatedValue > 0.9f) {
-                        //todo: ligt
-                    } else {
-                        //todo: darkstatusbar
-                    }
-                }
-            }
-        });
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//
+//                if (pick_photos) {
+//                    return;
+//                }
+//
+//                //hiding toolbar on scroll
+//                float translationY = toolbar.getTranslationY() - dy;
+//                if (-translationY > toolbar.getHeight()) {
+//                    translationY = -toolbar.getHeight();
+//                    if (true) { //todo: elevated toolbar or something
+//                        toolbar.setActivated(true);
+//                    }
+//                } else if (translationY > 0) {
+//                    translationY = 0;
+//                    if (!recyclerView.canScrollVertically(-1)) {  //todo: elevated toolbar or something
+//                        toolbar.setActivated(false);
+//                    }
+//                }
+//                toolbar.setTranslationY(translationY);
+//
+//                //animate statusBarIcon color
+//                boolean selectorModeActive = recyclerViewAdapter
+//                        .getSelectorManager().isSelectorModeActive();
+//                if (!selectorModeActive && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //todo: also something was about light and dark theme
+//                    //only animate statusBar icons color, when not in selectorMode
+//                    float animatedValue = (-translationY) / toolbar.getHeight();
+//                    if (animatedValue > 0.9f) {
+//                        //todo: ligt
+//                    } else {
+//                        //todo: darkstatusbar
+//                    }
+//                }
+//            }
+//        });
 
         final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -294,104 +293,81 @@ public class MainActivity extends ThemeableActivity {
 
         //setting window insets manually
         final ViewGroup rootView = findViewById(R.id.root_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            rootView.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                @Override
-                @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
-                public WindowInsets onApplyWindowInsets(View view, WindowInsets insets) {
-                    // clear this listener so insets aren't re-applied
-                    rootView.setOnApplyWindowInsetsListener(null);
-                    Log.d("MainActivity", "onApplyWindowInsets()"
-                            + "[" + insets.getSystemWindowInsetLeft() + ", " +
-                            insets.getSystemWindowInsetTop() + ", " +
-                            insets.getSystemWindowInsetRight() + ", " +
-                            insets.getSystemWindowInsetBottom() + "]");
-
-                    toolbar.setPadding(toolbar.getPaddingStart(),
-                            toolbar.getPaddingTop() + insets.getSystemWindowInsetTop(),
-                            toolbar.getPaddingEnd(),
-                            toolbar.getPaddingBottom());
-
-                    ViewGroup.MarginLayoutParams toolbarParams
-                            = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                    toolbarParams.leftMargin = insets.getSystemWindowInsetLeft();
-                    toolbarParams.rightMargin = insets.getSystemWindowInsetRight();
-                    toolbar.setLayoutParams(toolbarParams);
-
-                    recyclerView.setPadding(recyclerView.getPaddingStart() + insets.getSystemWindowInsetLeft(),
-                            recyclerView.getPaddingTop() + insets.getSystemWindowInsetTop(),
-                            recyclerView.getPaddingEnd() + insets.getSystemWindowInsetRight(),
-                            recyclerView.getPaddingBottom() + insets.getSystemWindowInsetBottom());
-
-                    fab.setTranslationY(-insets.getSystemWindowInsetBottom());
-                    fab.setTranslationX(-insets.getSystemWindowInsetRight());
-
-                    return insets.consumeSystemWindowInsets();
-                }
-            });
-        } else {
-            rootView.getViewTreeObserver()
-                    .addOnGlobalLayoutListener(
-                            new ViewTreeObserver.OnGlobalLayoutListener() {
-                                @Override
-                                public void onGlobalLayout() {
-                                    rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                                    // hacky way of getting window insets on pre-Lollipop
-                                    // somewhat works...
-                                    int[] screenSize = Util.getScreenSize(MainActivity.this);
-
-                                    int[] windowInsets = new int[]{
-                                            Math.abs(screenSize[0] - rootView.getLeft()),
-                                            Math.abs(screenSize[1] - rootView.getTop()),
-                                            Math.abs(screenSize[2] - rootView.getRight()),
-                                            Math.abs(screenSize[3] - rootView.getBottom())};
-
-                                    toolbar.setPadding(toolbar.getPaddingStart(),
-                                            toolbar.getPaddingTop() + windowInsets[1],
-                                            toolbar.getPaddingEnd(),
-                                            toolbar.getPaddingBottom());
-
-                                    ViewGroup.MarginLayoutParams toolbarParams
-                                            = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                                    toolbarParams.leftMargin += windowInsets[0];
-                                    toolbarParams.rightMargin += windowInsets[2];
-                                    toolbar.setLayoutParams(toolbarParams);
-
-                                    recyclerView.setPadding(recyclerView.getPaddingStart() + windowInsets[0],
-                                            recyclerView.getPaddingTop() + windowInsets[1],
-                                            recyclerView.getPaddingEnd() + windowInsets[2],
-                                            recyclerView.getPaddingBottom() + windowInsets[3]);
-
-                                    fab.setTranslationX(-windowInsets[2]);
-                                    fab.setTranslationY(-windowInsets[3]);
-                                }
-                            });
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+//            rootView.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+//                @Override
+//                @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
+//                public WindowInsets onApplyWindowInsets(View view, WindowInsets insets) {
+//                    // clear this listener so insets aren't re-applied
+//                    rootView.setOnApplyWindowInsetsListener(null);
+//                    Log.d("MainActivity", "onApplyWindowInsets()"
+//                            + "[" + insets.getSystemWindowInsetLeft() + ", " +
+//                            insets.getSystemWindowInsetTop() + ", " +
+//                            insets.getSystemWindowInsetRight() + ", " +
+//                            insets.getSystemWindowInsetBottom() + "]");
+//
+//                    toolbar.setPadding(toolbar.getPaddingStart(),
+//                            toolbar.getPaddingTop() + insets.getSystemWindowInsetTop(),
+//                            toolbar.getPaddingEnd(),
+//                            toolbar.getPaddingBottom());
+//
+//                    ViewGroup.MarginLayoutParams toolbarParams
+//                            = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+//                    toolbarParams.leftMargin = insets.getSystemWindowInsetLeft();
+//                    toolbarParams.rightMargin = insets.getSystemWindowInsetRight();
+//                    toolbar.setLayoutParams(toolbarParams);
+//
+//                    recyclerView.setPadding(recyclerView.getPaddingStart() + insets.getSystemWindowInsetLeft(),
+//                            recyclerView.getPaddingTop() + insets.getSystemWindowInsetTop(),
+//                            recyclerView.getPaddingEnd() + insets.getSystemWindowInsetRight(),
+//                            recyclerView.getPaddingBottom() + insets.getSystemWindowInsetBottom());
+//
+//                    fab.setTranslationY(-insets.getSystemWindowInsetBottom());
+//                    fab.setTranslationX(-insets.getSystemWindowInsetRight());
+//
+//                    return insets.consumeSystemWindowInsets();
+//                }
+//            });
+//        } else {
+//            rootView.getViewTreeObserver()
+//                    .addOnGlobalLayoutListener(
+//                            new ViewTreeObserver.OnGlobalLayoutListener() {
+//                                @Override
+//                                public void onGlobalLayout() {
+//                                    rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                                    // hacky way of getting window insets on pre-Lollipop
+//                                    // somewhat works...
+//                                    int[] screenSize = Util.getScreenSize(MainActivity.this);
+//
+//                                    int[] windowInsets = new int[]{
+//                                            Math.abs(screenSize[0] - rootView.getLeft()),
+//                                            Math.abs(screenSize[1] - rootView.getTop()),
+//                                            Math.abs(screenSize[2] - rootView.getRight()),
+//                                            Math.abs(screenSize[3] - rootView.getBottom())};
+//
+//                                    toolbar.setPadding(toolbar.getPaddingStart(),
+//                                            toolbar.getPaddingTop() + windowInsets[1],
+//                                            toolbar.getPaddingEnd(),
+//                                            toolbar.getPaddingBottom());
+//
+//                                    ViewGroup.MarginLayoutParams toolbarParams
+//                                            = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+//                                    toolbarParams.leftMargin += windowInsets[0];
+//                                    toolbarParams.rightMargin += windowInsets[2];
+//                                    toolbar.setLayoutParams(toolbarParams);
+//
+//                                    recyclerView.setPadding(recyclerView.getPaddingStart() + windowInsets[0],
+//                                            recyclerView.getPaddingTop() + windowInsets[1],
+//                                            recyclerView.getPaddingEnd() + windowInsets[2],
+//                                            recyclerView.getPaddingBottom() + windowInsets[3]);
+//
+//                                    fab.setTranslationX(-windowInsets[2]);
+//                                    fab.setTranslationY(-windowInsets[3]);
+//                                }
+//                            });
+//        }
 
         //needed for transparent statusBar
-        setSystemUiFlags();
-    }
-
-    private void initTheme() {
-        if (pick_photos) {
-            return;
-        }
-
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolbarColor);
-        toolbar.setTitleTextColor(textColorPrimary);
-
-        //todo: handle BS
-
-//        if (theme.darkStatusBarIcons()) {
-//            Util.setDarkStatusBarIcons(findViewById(R.id.root_view));
-//        } else {
-//            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
-//        }
-//
-//        if (theme.statusBarOverlay()) {
-//            addStatusBarOverlay(toolbar);
-//        }
     }
 
     @Override
@@ -597,7 +573,6 @@ public class MainActivity extends ThemeableActivity {
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

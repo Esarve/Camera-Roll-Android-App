@@ -69,7 +69,6 @@
     </style>
 
     <style name="CameraRoll.Theme.Main" parent="CameraRoll.Theme">
-        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>

@@ -129,7 +129,6 @@ public class SettingsActivity extends ThemeableActivity {
             }
         });
 
-        setSystemUiFlags();
         initTheme();
     }
 
@@ -139,8 +138,8 @@ public class SettingsActivity extends ThemeableActivity {
         toolbar.setTitleTextColor(textColorPrimary);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int statusBarColor = getStatusBarColor();
-            getWindow().setStatusBarColor(statusBarColor);
+//            int statusBarColor = getStatusBarColor();
+//            getWindow().setStatusBarColor(statusBarColor);
         }
     }
 

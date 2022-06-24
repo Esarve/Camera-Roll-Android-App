@@ -10,10 +10,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -351,11 +349,6 @@ public class AlbumActivity extends ThemeableActivity
                                 }
                             });
         }
-
-        //onNewIntent(getIntent());
-
-        //needed for transparent statusBar
-        setSystemUiFlags();
 
         //load album
         String path;
@@ -793,10 +786,10 @@ public class AlbumActivity extends ThemeableActivity
             selectAll.setAlpha(0);
             ColorFade.fadeDrawableAlpha(selectAll, 255);
 
-            ColorDrawable statusBarOverlay = getStatusBarOverlay();
-            if (statusBarOverlay != null) {
-                ColorFade.fadeDrawableAlpha(statusBarOverlay, 0);
-            }
+//            ColorDrawable statusBarOverlay = getStatusBarOverlay();
+//            if (statusBarOverlay != null) {
+//                ColorFade.fadeDrawableAlpha(statusBarOverlay, 0);
+//            }
 
             Drawable navIcon = toolbar.getNavigationIcon();
             if (navIcon instanceof Animatable) {
@@ -850,11 +843,11 @@ public class AlbumActivity extends ThemeableActivity
             //todo: lightstatusbar
         }
 
-        ColorDrawable statusBarOverlay = getStatusBarOverlay();
-        if (statusBarOverlay != null) {
-            int alpha = Color.alpha(getStatusBarColor());
-            ColorFade.fadeDrawableAlpha(statusBarOverlay, alpha);
-        }
+//        ColorDrawable statusBarOverlay = getStatusBarOverlay();
+//        if (statusBarOverlay != null) {
+////            int alpha = Color.alpha(getStatusBarColor());
+////            ColorFade.fadeDrawableAlpha(statusBarOverlay, alpha);
+//        }
 
         ColorFade.fadeBackgroundColor(toolbar, accentColor, toolbarColor);
 

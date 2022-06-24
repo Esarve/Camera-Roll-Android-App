@@ -248,8 +248,6 @@ public class ItemActivity extends ThemeableActivity {
                             });
         }
 
-        //needed to achieve transparent navBar
-        setSystemUiFlags();
 
         if (!view_only) {
             String path;

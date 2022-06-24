@@ -195,8 +195,8 @@ public class ExifEditorActivity extends ThemeableActivity {
 //        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int statusBarColor = getStatusBarColor();
-            getWindow().setStatusBarColor(statusBarColor);
+//            int statusBarColor = getStatusBarColor();
+//            getWindow().setStatusBarColor(statusBarColor);
         }
     }
 

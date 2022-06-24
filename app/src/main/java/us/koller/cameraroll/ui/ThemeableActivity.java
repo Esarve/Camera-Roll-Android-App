@@ -2,11 +2,9 @@ package us.koller.cameraroll.ui;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
@@ -39,12 +36,9 @@ public abstract class ThemeableActivity extends BaseActivity {
     public int accentColor;
     public int accentTextColor;
 
-    private ColorDrawable statusBarOverlay;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Settings settings = Settings.getInstance(getApplicationContext());
         Constants.THEMES theme = settings.getTheme();
         int THEMETYPE = 0;
@@ -59,22 +53,29 @@ public abstract class ThemeableActivity extends BaseActivity {
                 THEMETYPE = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
                 break;
         }
+        int nightmode = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         AppCompatDelegate.setDefaultNightMode(THEMETYPE);
-        //todo: do themeing BS
 
+        switch (nightmode) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                getWindow().getDecorView().setSystemUiVisibility(0);
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                }
+                break;
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                //   doStuff();
+                break;
+        }
         TypedValue typedValue = new TypedValue();
         getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
         int windowColor = -1;
         if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT){
             windowColor = typedValue.data;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(windowColor);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
+        getWindow().setStatusBarColor(windowColor);
 
     }
 
@@ -86,20 +87,11 @@ public abstract class ThemeableActivity extends BaseActivity {
 
         checkTags(rootView);
 
-//        onThemeApplied(theme);
+        readTheme(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setupTaskDescription();
         }
-    }
-
-    //systemUiFlags need to be reset to achieve transparent status- and NavigationBar
-    void setSystemUiFlags() {
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
     private void readTheme(Context context) {
@@ -220,31 +212,5 @@ public abstract class ThemeableActivity extends BaseActivity {
 
     public int getTaskDescriptionColor() {
         return ContextCompat.getColor(this, R.color.colorPrimary);
-    }
-
-    public int getStatusBarColor() {
-        float darken = 0.96f;
-        return Color.argb(
-                (int) (Color.alpha(toolbarColor) * darken),
-                (int) (Color.red(toolbarColor) * darken),
-                (int) (Color.green(toolbarColor) * darken),
-                (int) (Color.blue(toolbarColor) * darken));
-    }
-
-    public void addStatusBarOverlay(final Toolbar toolbar) {
-        int statusBarColor = getStatusBarColor();
-        statusBarOverlay = new ColorDrawable(statusBarColor);
-        toolbar.post(new Runnable() {
-            @Override
-            public void run() {
-                statusBarOverlay.setBounds(new Rect(0, 0,
-                        toolbar.getWidth(), toolbar.getPaddingTop()));
-                toolbar.getOverlay().add(statusBarOverlay);
-            }
-        });
-    }
-
-    public ColorDrawable getStatusBarOverlay() {
-        return statusBarOverlay;
     }
 }

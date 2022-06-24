@@ -8,10 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -251,7 +249,6 @@ public class FileExplorerActivity extends ThemeableActivity
         }
 
         //needed to achieve transparent navBar
-        setSystemUiFlags();
 
         //load files
         if (savedInstanceState != null
@@ -728,10 +725,10 @@ public class FileExplorerActivity extends ThemeableActivity
 //            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
 //        }
 
-        ColorDrawable statusBarOverlay = getStatusBarOverlay();
-        if (statusBarOverlay != null) {
-            ColorFade.fadeDrawableAlpha(statusBarOverlay, 0);
-        }
+//        ColorDrawable statusBarOverlay = getStatusBarOverlay();
+//        if (statusBarOverlay != null) {
+//            ColorFade.fadeDrawableAlpha(statusBarOverlay, 0);
+//        }
 
         ColorFade.fadeBackgroundColor(toolbar, toolbarColor, accentColor);
 
@@ -950,11 +947,11 @@ public class FileExplorerActivity extends ThemeableActivity
 //            Util.setLightStatusBarIcons(findViewById(R.id.root_view));
 //        }
 
-        ColorDrawable statusBarOverlay = getStatusBarOverlay();
-        if (statusBarOverlay != null) {
-            int alpha = Color.alpha(getStatusBarColor());
-            ColorFade.fadeDrawableAlpha(statusBarOverlay, alpha);
-        }
+//        ColorDrawable statusBarOverlay = getStatusBarOverlay();
+//        if (statusBarOverlay != null) {
+//            int alpha = Color.alpha(getStatusBarColor());
+//            ColorFade.fadeDrawableAlpha(statusBarOverlay, alpha);
+//        }
 
         //todo: elevated shit
 //        toolbar.setActivated(theme.elevatedToolbar());

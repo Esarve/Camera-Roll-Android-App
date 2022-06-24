@@ -7,7 +7,7 @@ android {
     compileSdkVersion 32
     defaultConfig {
         applicationId "us.koller.cameraroll"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 32
         versionCode 36
         versionName "v1.0.6"
